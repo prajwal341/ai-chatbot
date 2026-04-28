@@ -1,5 +1,5 @@
 import nltk
-from nltk.tokenize import word_tokenize
+nltk.download('punkt')
 
 # download only if not already
 try:
