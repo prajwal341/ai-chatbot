@@ -1,149 +1,150 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AI Chat Support</title>
+    <title>Customer Support</title>
 
     <style>
         body {
             margin: 0;
             font-family: "Segoe UI", Arial, sans-serif;
-            background: linear-gradient(135deg, #1f1c2c, #928dab);
+            background: #f3f4f6;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
 
-        /* Chat container */
         .chat-wrapper {
             width: 420px;
-            height: 600px;
-            background: #ffffff;
-            border-radius: 18px;
+            height: 620px;
+            background: #fff;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
         }
 
-        /* Header */
+        /* HEADER */
         .chat-header {
-            background: linear-gradient(90deg, #4facfe, #00f2fe);
-            padding: 15px;
+            background: #1f2937;
             color: white;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
+            padding: 14px;
+            display: flex;
+            align-items: center;
         }
 
-        /* Chat area */
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #2563eb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .header-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        /* CHAT AREA */
         .chat-box {
             flex: 1;
             padding: 15px;
             overflow-y: auto;
-            background: #f7f9fc;
+            background: #f9fafb;
         }
 
-        /* Message row */
         .msg-row {
             display: flex;
             margin: 10px 0;
-            align-items: flex-end;
         }
 
-        /* Bot */
-        .bot {
-            justify-content: flex-start;
-        }
-
-        /* User */
         .user {
             justify-content: flex-end;
         }
 
-        /* Avatar */
-        .avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            font-size: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            margin: 0 8px;
+        .bot {
+            justify-content: flex-start;
         }
 
-        .bot .avatar {
-            background: #4facfe;
-        }
-
-        .user .avatar {
-            background: #43e97b;
-        }
-
-        /* Bubble */
         .bubble {
             max-width: 70%;
             padding: 10px 14px;
-            border-radius: 16px;
+            border-radius: 10px;
             font-size: 14px;
             line-height: 1.4;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-        }
-
-        .bot .bubble {
-            background: #ffffff;
-            border: 1px solid #e0e0e0;
         }
 
         .user .bubble {
-            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            background: #2563eb;
             color: white;
         }
 
-        /* Input area */
+        .bot .bubble {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .time {
+            font-size: 10px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        /* TYPING */
+        .typing {
+            font-size: 12px;
+            color: #6b7280;
+            padding-left: 15px;
+            display: none;
+        }
+
+        /* INPUT */
         .input-area {
             display: flex;
             padding: 10px;
-            border-top: 1px solid #ddd;
-            background: white;
+            border-top: 1px solid #e5e7eb;
         }
 
         input {
             flex: 1;
-            padding: 12px;
-            border: none;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #d1d5db;
             outline: none;
-            border-radius: 25px;
-            background: #f1f1f1;
-            font-size: 14px;
         }
 
         button {
             margin-left: 10px;
-            padding: 12px 16px;
+            padding: 10px 16px;
             border: none;
-            border-radius: 25px;
-            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            border-radius: 20px;
+            background: #2563eb;
             color: white;
             cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
         }
 
         button:hover {
-            transform: scale(1.05);
-        }
-
-        /* Scrollbar */
-        .chat-box::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        .chat-box::-webkit-scrollbar-thumb {
-            background: #bbb;
-            border-radius: 10px;
+            background: #1d4ed8;
         }
     </style>
 </head>
@@ -153,42 +154,54 @@
 <div class="chat-wrapper">
 
     <div class="chat-header">
-        AI Customer Support 💬
+        <div class="avatar">CS</div>
+        <div class="header-text">
+            <div>Customer Support</div>
+            <div class="status">
+                <span class="status-dot"></span>Online • Replies instantly
+            </div>
+        </div>
     </div>
 
     <div class="chat-box" id="chat"></div>
 
+    <div class="typing" id="typing">Agent is typing...</div>
+
     <div class="input-area">
-        <input type="text" id="msg" placeholder="Type your message..." />
+        <input type="text" id="msg" placeholder="Describe your issue..." />
         <button onclick="sendMessage()">Send</button>
     </div>
 
 </div>
 
 <script>
+function getTime() {
+    let d = new Date();
+    return d.getHours() + ":" + String(d.getMinutes()).padStart(2,'0');
+}
+
 function addMessage(text, type) {
     let chat = document.getElementById("chat");
 
     let row = document.createElement("div");
     row.className = "msg-row " + type;
 
-    let avatar = document.createElement("div");
-    avatar.className = "avatar";
-    avatar.innerText = type === "user" ? "U" : "AI";
+    let wrapper = document.createElement("div");
 
     let bubble = document.createElement("div");
     bubble.className = "bubble";
     bubble.innerText = text;
 
-    if (type === "user") {
-        row.appendChild(bubble);
-        row.appendChild(avatar);
-    } else {
-        row.appendChild(avatar);
-        row.appendChild(bubble);
-    }
+    let time = document.createElement("div");
+    time.className = "time";
+    time.innerText = getTime();
 
+    wrapper.appendChild(bubble);
+    wrapper.appendChild(time);
+
+    row.appendChild(wrapper);
     chat.appendChild(row);
+
     chat.scrollTop = chat.scrollHeight;
 }
 
@@ -201,6 +214,8 @@ function sendMessage() {
     addMessage(msg, "user");
     input.value = "";
 
+    document.getElementById("typing").style.display = "block";
+
     fetch("/chat", {
         method: "POST",
         headers: {
@@ -210,20 +225,20 @@ function sendMessage() {
     })
     .then(res => res.json())
     .then(data => {
+        document.getElementById("typing").style.display = "none";
         addMessage(data.response, "bot");
     })
     .catch(() => {
-        addMessage("Server error. Please try again.", "bot");
+        document.getElementById("typing").style.display = "none";
+        addMessage("We are facing technical issues. Please try again later.", "bot");
     });
 }
 
-// Enter key support
 document.getElementById("msg").addEventListener("keypress", function(e) {
     if (e.key === "Enter") sendMessage();
 });
 
-// Welcome message
-addMessage("Hello! I am your AI support assistant. How can I help you?", "bot");
+addMessage("Hello! Welcome to Customer Support. How can I assist you today?", "bot");
 </script>
 
 </body>
