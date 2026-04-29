@@ -1,15 +1,12 @@
-import nltk
-nltk.download('punkt')
+import os
+from openai import OpenAI
 
-# download only if not already
-try:
-    nltk.data.find('tokenizers/punkt')
-except:
-    nltk.download('punkt')
+# Initialize OpenAI client
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+# Fallback FAQ (backup if AI fails)
 faq = {
-    "hello": "Hi! How can I assist you today?",
-    "hi": "Hello! What can I help you with?",
+    "hello": "Hello! How can I assist you today?",
     "fees": "Course fees depend on the program.",
     "duration": "Course duration is 3 months.",
     "course": "We offer AI, Web Development, and Python courses.",
@@ -19,10 +16,25 @@ faq = {
 }
 
 def get_response(user_input):
-    user_input = user_input.lower()
+    try:
+        # AI response
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "You are a professional customer support assistant. Answer clearly and politely."},
+                {"role": "user", "content": user_input}
+            ]
+        )
 
-    for key in faq:
-        if key in user_input:
-            return faq[key]
+        return response.choices[0].message.content
 
-    return "Sorry, I didn't understand that."   
+    except Exception as e:
+        print("AI Error:", e)
+
+        # fallback if AI fails
+        user_input = user_input.lower()
+        for key in faq:
+            if key in user_input:
+                return faq[key]
+
+        return "Sorry, I'm facing a technical issue right now."   
